@@ -147,6 +147,6 @@ def predictor(file_name):
 
 
 if __name__ == '__main__':
-    # train()
+    train()
     # evaluator()
-    predictor("ISIC_0027850.jpg")
+    # predictor("ISIC_0027850.jpg")
