@@ -83,7 +83,7 @@ def train():
     val_datagen = ImageDataGenerator()
     val_generator = val_datagen.flow(x_test, y_test, batch_size=32)
 
-    # Create the ResNet50 model
+    # Create the VGG16 model
     base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
     x = base_model.output
     x = keras.layers.GlobalAveragePooling2D()(x)
@@ -118,11 +118,12 @@ def train():
     plt.legend()
     plt.show()
 
+    # Save the model
+    model.save('SkinCancer_CNN_VGG16.h5')
+
     print("Loss of the VGG16 model is - ", history_fit.evaluate(x_test, y_test)[0])
     print("Accuracy of the VGG16 model is - ", history_fit.evaluate(x_test, y_test)[1] * 100, "%")
 
-    # Save the model
-    model.save('SkinCancer_CNN_VGG16.h5')
 
 
 def evaluator():

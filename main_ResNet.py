@@ -121,11 +121,12 @@ def train():
     plt.legend()
     plt.show()
 
-    print("Loss of the VGG16 model is - ", history_fit.evaluate(x_test, y_test)[0])
-    print("Accuracy of the VGG16 model is - ", history_fit.evaluate(x_test, y_test)[1] * 100, "%")
-
     # Save the model
-    model.save('SkinCancer_CNN_VGG16.h5')
+    model.save('SkinCancer_CNN_ResNet50.h5')
+
+    print("Loss of the ResNet50 model is - ", history_fit.evaluate(x_test, y_test)[0])
+    print("Accuracy of the ResNet50 model is - ", history_fit.evaluate(x_test, y_test)[1] * 100, "%")
+
 
 
 def evaluator():
