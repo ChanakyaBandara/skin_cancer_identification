@@ -12,10 +12,11 @@ from keras.src.preprocessing.image import ImageDataGenerator
 from keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
+import time
 
-FILEPATH = 'E:\Projects\skin_cancer_identification'
+FILEPATH = 'C:/Users/ishan/PycharmProjects/skin_cancer_identification'
 
-metadata = pd.read_csv('%s\dataset\HAM10000_metadata.csv' % FILEPATH)
+metadata = pd.read_csv('%s/dataset/HAM10000_metadata.csv' % FILEPATH)
 
 label_arr = ['akiec', 'bcc', 'bkl', 'df', 'mel', 'nv', 'vasc']
 label_dict = {'akiec': 0, 'bcc': 1, 'bkl': 2, 'df': 3, 'mel': 4, 'nv': 5, 'vasc': 6}
@@ -24,14 +25,13 @@ label_dict = {'akiec': 0, 'bcc': 1, 'bkl': 2, 'df': 3, 'mel': 4, 'nv': 5, 'vasc'
 epochs = 32
 batch_size = 64
 # re-size all the images to this
-image_size = 32
+image_size = 128
 
 input_shape = (128, 128, 3)
 num_classes = 7
 
 def preprocess():
     # Preprocess the data
-    image_size = 128
 
     X = []
     y = []
@@ -40,7 +40,7 @@ def preprocess():
         if index % 1000 == 0:
             print(f"Processing image {index}")
         img_id = row['image_id'] + '.jpg'
-        img_path1 = os.path.join('%s\dataset\skin-cancer-dataset\Skin Cancer' % FILEPATH, img_id)
+        img_path1 = os.path.join('%s/dataset/skin-cancer-dataset/Skin Cancer' % FILEPATH, img_id)
         if os.path.exists(img_path1):
             img_path = img_path1
         else:
@@ -114,37 +114,38 @@ def train():
     plt.plot(history_fit.history['accuracy'], label='Training accuracy')
     plt.plot(history_fit.history['val_accuracy'], label='Validation accuracy')
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.savefig('ResNet50_accuracy.png')
 
     plt.plot(history_fit.history['loss'], label='Training loss')
     plt.plot(history_fit.history['val_loss'], label='Validation loss')
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.savefig('ResNet50_loss.png')
 
     # Save the model
     model.save('SkinCancer_CNN_ResNet50.h5')
 
-    print("Loss of the ResNet50 model is - ", history_fit.evaluate(x_test, y_test)[0])
-    print("Accuracy of the ResNet50 model is - ", history_fit.evaluate(x_test, y_test)[1] * 100, "%")
+    # print("Loss of the ResNet50 model is - ", history_fit.evaluate(x_test, y_test)[0])
+    # print("Accuracy of the ResNet50 model is - ", history_fit.evaluate(x_test, y_test)[1] * 100, "%")
 
 
 
 def evaluator():
-    model = keras.models.load_model('%s\SkinCancer_CNN.h5' % FILEPATH)
+    model = keras.models.load_model('%s/SkinCancer_CNN_ResNet50.h5' % FILEPATH)
     x_test, x_train, y_test, y_train = preprocess()
 
     # Check out the layers in our model
     model.summary()
 
-    print("Loss of the model is - ", model.evaluate(x_test, y_test)[0])
+    print("Loss of the model is - ", model.evaluate(x_test, y_test))
     print("Accuracy of the model is - ", model.evaluate(x_test, y_test)[1] * 100, "%")
 
 
 def predictor(file_name):
-    model = keras.models.load_model('%s\SkinCancer_ResNet50.h5' % FILEPATH)
-    image_size = 32
+    model = keras.models.load_model('%s/SkinCancer_CNN_ResNet50.h5' % FILEPATH)
 
-    img_path1 = os.path.join('%s\dataset\skin-cancer-dataset\Skin Cancer' % FILEPATH,
+    img_path1 = os.path.join('%s/dataset/skin-cancer-dataset/Skin Cancer' % FILEPATH,
                              file_name)
     if os.path.exists(img_path1):
         img_path = img_path1
@@ -168,7 +169,13 @@ def predictor(file_name):
     print(final_res)
 
 
-if __name__ == '__main__':
+def main():
+    start_time = time.time()
     train()
     # evaluator()
     # predictor("ISIC_0027850.jpg")
+    print("--- %s ResNet50 - seconds ---" % (time.time() - start_time))
+
+
+if __name__ == '__main__':
+    main()
