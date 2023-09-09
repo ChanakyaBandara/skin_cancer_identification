@@ -11,9 +11,10 @@ from sklearn.model_selection import train_test_split
 from tensorflow import keras
 import time
 
-FILEPATH = 'C:/Users/ishan/PycharmProjects/skin_cancer_identification'
+# FILEPATH = 'C:\Users\ishan\PycharmProjects\skin_cancer_identification'
+FILEPATH = 'E:\Projects\skin_cancer_identification'
 
-metadata = pd.read_csv('%s/dataset/HAM10000_metadata.csv' % FILEPATH)
+metadata = pd.read_csv('%s\dataset\HAM10000_metadata.csv' % FILEPATH)
 
 label_arr = ['akiec', 'bcc', 'bkl', 'df', 'mel', 'nv', 'vasc']
 label_dict = {'akiec': 0, 'bcc': 1, 'bkl': 2, 'df': 3, 'mel': 4, 'nv': 5, 'vasc': 6}
@@ -37,7 +38,7 @@ def preprocess():
         if index % 1000 == 0:
             print(f"Processing image {index}")
         img_id = row['image_id'] + '.jpg'
-        img_path1 = os.path.join('%s/dataset/skin-cancer-dataset/Skin Cancer' % FILEPATH, img_id)
+        img_path1 = os.path.join('%s\dataset\skin-cancer-dataset\Skin Cancer' % FILEPATH, img_id)
         if os.path.exists(img_path1):
             img_path = img_path1
         else:
@@ -118,7 +119,7 @@ def train():
     plt.plot(history_fit.history['val_loss'], label='Validation loss')
     plt.legend()
     # plt.show()
-    plt.savefig('VGG16_accuracy.png')
+    plt.savefig('VGG16_loss.png')
 
     # Save the model
     model.save('SkinCancer_CNN_VGG16.h5')
@@ -129,7 +130,7 @@ def train():
 
 
 def evaluator():
-    model = keras.models.load_model('%s/SkinCancer_CNN_VGG16.h5' % FILEPATH)
+    model = keras.models.load_model('%s\SkinCancer_CNN_VGG16.h5' % FILEPATH)
     x_test, x_train, y_test, y_train = preprocess()
 
     # Check out the layers in our model
@@ -140,9 +141,9 @@ def evaluator():
 
 
 def predictor(file_name):
-    model = keras.models.load_model('%s/SkinCancer_CNN_VGG16.h5' % FILEPATH)
+    model = keras.models.load_model('%s\SkinCancer_CNN_VGG16.h5' % FILEPATH)
 
-    img_path1 = os.path.join('%s/dataset/skin-cancer-dataset/Skin Cancer' % FILEPATH,
+    img_path1 = os.path.join('%s\dataset\skin-cancer-dataset\Skin Cancer' % FILEPATH,
                              file_name)
     if os.path.exists(img_path1):
         img_path = img_path1
@@ -168,9 +169,9 @@ def predictor(file_name):
 
 def main():
     start_time = time.time()
-    train()
+    # train()
     # evaluator()
-    # predictor("ISIC_0027850.jpg")
+    predictor("ISIC_0027850.jpg")
     print("--- %s VGG16 - seconds ---" % (time.time() - start_time))
 
 

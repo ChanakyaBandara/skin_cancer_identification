@@ -10,9 +10,10 @@ from keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 from random import sample
 
-FILEPATH = 'C:/Users/ishan/PycharmProjects/skin_cancer_identification'
+# FILEPATH = 'C:\Users\ishan\PycharmProjects\skin_cancer_identification'
+FILEPATH = 'E:\Projects\skin_cancer_identification'
 
-metadata = pd.read_csv('%s/dataset/HAM10000_metadata.csv' % FILEPATH)
+metadata = pd.read_csv('%s\dataset\HAM10000_metadata.csv' % FILEPATH)
 
 print("Size", len(metadata))
 
@@ -28,7 +29,7 @@ def preprocess():
         if index % 1000 == 0:
             print(f"Processing image {index}")
         img_id = row['image_id'] + '.jpg'
-        img_path1 = os.path.join('%s/dataset/skin-cancer-dataset/Skin Cancer' % FILEPATH,
+        img_path1 = os.path.join('%s\dataset\skin-cancer-dataset\Skin Cancer' % FILEPATH,
                                  img_id)
         if os.path.exists(img_path1):
             img_path = img_path1
@@ -111,7 +112,7 @@ def train():
 
 
 def evaluator():
-    model = keras.models.load_model('%s/SkinCancer_CNN.h5' % FILEPATH)
+    model = keras.models.load_model('%s\SkinCancer_CNN.h5' % FILEPATH)
     x_test, x_train, y_test, y_train = preprocess()
 
     # Check out the layers in our model
@@ -122,10 +123,10 @@ def evaluator():
 
 
 def predictor(file_name):
-    model = keras.models.load_model('%s/SkinCancer_CNN.h5' % FILEPATH)
+    model = keras.models.load_model('%s\SkinCancer_CNN.h5' % FILEPATH)
     image_size = 32
 
-    img_path1 = os.path.join('%s/dataset/skin-cancer-dataset/Skin Cancer' % FILEPATH,
+    img_path1 = os.path.join('%s\dataset\skin-cancer-dataset\Skin Cancer' % FILEPATH,
                              file_name)
     if os.path.exists(img_path1):
         img_path = img_path1
